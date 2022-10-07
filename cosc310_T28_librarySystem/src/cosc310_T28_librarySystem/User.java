@@ -6,4 +6,12 @@ public class User extends Account{
 	private int borrow_num;
 	private final int max_borrow=3;
 	
+	public User() {
+	
+	super();
+	borrow_books=new book[max_borrow];
+}
+
+
+	private void searchBook() {}
 }
