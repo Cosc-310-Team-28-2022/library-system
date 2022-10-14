@@ -3,7 +3,6 @@ package cosc310_T28_librarySystem;
 import java.util.Scanner;
 
 public class UserAndManagerTerminal extends Thread {
-    Account currentAccount = null;
     LocalLibraryData localLibraryData;
 
     public UserAndManagerTerminal(LocalLibraryData localLibraryData) {
@@ -127,8 +126,8 @@ public class UserAndManagerTerminal extends Thread {
             }
         }
     }
-    private UserOrManagerCommandResult askAndDoNextUserOrManagerCommand(Scanner scanner, LocalLibraryData localLibraryData, Account account) {
-        System.out.println("Welcome " + account.getUsername() + ". What would you like to do? Enter a number to make a selection.");
+    private UserOrManagerCommandResult askAndDoNextUserOrManagerCommand(Scanner scanner, LocalLibraryData localLibraryData, Account currentAccount) {
+        System.out.println("Welcome " + currentAccount.getUsername() + ". What would you like to do? Enter a number to make a selection.");
         if (currentAccount instanceof Manager) {
             System.out.println("1: search for a book");
             System.out.println("2: checkout a book");
@@ -162,7 +161,7 @@ public class UserAndManagerTerminal extends Thread {
         	return bookGroupToCompare;
             }
         }
-        System.out.print("Book not found.");
+        System.out.println("Book not found.");
         return null;
     }
     static enum UserOrManagerCommandResult {
