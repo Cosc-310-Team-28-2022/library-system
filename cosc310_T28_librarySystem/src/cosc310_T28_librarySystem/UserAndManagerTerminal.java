@@ -39,7 +39,7 @@ public class UserAndManagerTerminal extends Thread {
 	    //log in or create first account
 	    if (localLibraryData.managerAccounts.isEmpty()) {
                 System.out.println("Currently there are no manager (librarian) accounts. Please create a manager account.");
-		currentAccount = tryCreatingAccount(scanner, true);
+		currentAccount = tryCreatingAccount(scanner, localLibraryData, true);
 		if (currentAccount == null) {
 		    System.out.println("Account creation failed. Exiting.");
                     finishedWithoutInterruption = true;
@@ -69,7 +69,7 @@ public class UserAndManagerTerminal extends Thread {
 	}
     }
 
-    private Account tryCreatingAccount(Scanner scanner, boolean isManager) {
+    private Account tryCreatingAccount(Scanner scanner, LocalLibraryData localLibraryData, boolean isManager) {
         String username = null;
         while (username == null) {
             System.out.print("Username: ");
@@ -81,6 +81,8 @@ public class UserAndManagerTerminal extends Thread {
         	System.out.println("The username must contain only letters, numbers, _- symbols, or spaces.");
             } else if (!(1 <= usernameEntered.length() && usernameEntered.length() <= 99)) {
         	System.out.println("The username must be 1 to 99 characters long.");
+            } else if (localLibraryData.managerAccounts.containsKey(usernameEntered) && localLibraryData.userAccounts.containsKey(usernameEntered)) {
+        	System.out.println("The username already exists.");
             } else {
         	username = usernameEntered;
             }
