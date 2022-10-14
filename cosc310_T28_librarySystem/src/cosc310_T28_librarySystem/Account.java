@@ -26,19 +26,23 @@ public class Account implements Serializable{
 	return password.equals(passwordEntered);
     }
     
-    bookGroup searchForABook(Scanner scanner, LocalLibraryData localLibraryData) {
+    void searchForABook(Scanner scanner, LocalLibraryData localLibraryData) {
         System.out.print("Enter all or part of the title: ");
         if (!scanner.hasNextLine()) {
-            return null;
+            return;
         }
         String titleFragment = scanner.nextLine();
+        boolean found = false;
         for (bookGroup bookGroupToCompare : localLibraryData.bookGroups) {
             if (bookGroupToCompare.getTitle().contains(titleFragment)) {
             	System.out.println(bookGroupToCompare.getTitle());
+            	found = true;
             }
-        }return bookGroupToCompare;
-        System.out.println("Book not found.");
-        return null;
+        }
+        if (!found) {
+            System.out.println("Book not found.");
+        }
+        return;
     }
  
 }
