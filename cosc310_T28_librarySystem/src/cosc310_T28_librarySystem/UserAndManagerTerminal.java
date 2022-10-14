@@ -119,10 +119,12 @@ public class UserAndManagerTerminal extends Thread {
                 return null;
             }
             String usernameEntered = scanner.nextLine();
-            if (!localLibraryData.userAccounts.containsKey(usernameEntered)) {
-        	System.out.println("Account not found.");
-            } else {
+            if (localLibraryData.managerAccounts.containsKey(usernameEntered)) {
+        	accountToLogIn = localLibraryData.managerAccounts.get(usernameEntered);
+            } else if (localLibraryData.userAccounts.containsKey(usernameEntered)) {
         	accountToLogIn = localLibraryData.userAccounts.get(usernameEntered);
+            } else {
+        	System.out.println("Account not found.");
             }
         }
         while (true) {
