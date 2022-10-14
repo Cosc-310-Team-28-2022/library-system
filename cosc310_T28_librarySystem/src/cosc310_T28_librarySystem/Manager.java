@@ -5,7 +5,7 @@ public class Manager extends Account{
     private void addBook() {}
     private void delBook() {}
     private void searchUser() {}
-
+    private void changeStatus() {}
     public Manager(String userName, String password, int type) {
 	super(userName, password, type);
     }
