@@ -4,6 +4,7 @@ public class book{
 private bookGroup bg;	
 private int ISBN, date, ID;
 private String name, author, cate;
+private User holder=null;
 private boolean borrow=false;
 
 	public book() {
