@@ -8,14 +8,12 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
-import java.util.zip.GZIPInputStream;
 
 public class UserAndManagerTerminal extends Thread {
     LocalLibraryData localLibraryData;
 
-    public UserAndManagerTerminal(LocalLibraryData localLibraryData) {
+    public UserAndManagerTerminal() {
 	super();
-	this.localLibraryData = localLibraryData;
     }
 
     /**
@@ -25,6 +23,12 @@ public class UserAndManagerTerminal extends Thread {
      * This function is automatically run by the thread after start() is called.
      */
     public void run() {
+	
+	localLibraryData = loadSession();
+	if (localLibraryData == null) {
+            localLibraryData = new LocalLibraryData();
+	}
+	
 	boolean finishedWithoutInterruption = false; // this boolean tells the try-finally clause whether
 						     // scanner.hasNextLine()
 						     // failed
@@ -186,7 +190,7 @@ public class UserAndManagerTerminal extends Thread {
 	    i.printStackTrace();
 	}
     }
-    private LocalLibraryData loadSession(Scanner scanner) {
+    private LocalLibraryData loadSession() {
 	if (Files.exists(Paths.get("cosc310_T28_library_system_saved_files/main.ser"))) {
 	    try (
 		    FileInputStream fileIn = new FileInputStream("cosc310_T28_library_system_saved_files/main.ser");
