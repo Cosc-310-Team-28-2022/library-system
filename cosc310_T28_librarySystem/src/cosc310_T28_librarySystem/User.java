@@ -6,12 +6,14 @@ public class User extends Account{
 	private int borrow_num;
 	private final int max_borrow=3;
 	
-	public User() {
-	
-	super();
-	borrow_books=new book[max_borrow];
-}
+	public User(String userName, String password, int type) {
+	    super(userName, password, type);
+
+	    borrow_books=new book[max_borrow];
+	}
 
 
 	private void searchBook() {}
+
+
 }
