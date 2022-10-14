@@ -19,7 +19,7 @@ public class UserAndManagerTerminal extends Thread {
      */
     public void run() {
 	boolean finishedWithoutInterruption = false; // this boolean tells the try-finally clause whether
-						     // scanner.hasNext()
+						     // scanner.hasNextLine()
 						     // failed
 	try (Scanner scanner = new Scanner(System.in)) {
 	    Account currentAccount;
@@ -27,9 +27,19 @@ public class UserAndManagerTerminal extends Thread {
 	    if (localLibraryData.managerAccounts.isEmpty()) {
                 System.out.println("Currently there are no manager (librarian) accounts. Please create a manager account.");
 		currentAccount = tryCreatingAccount(scanner, true);
-                localLibraryData.managerAccounts.add((Manager) currentAccount);
+		if (currentAccount == null) {
+		    System.out.println("Account creation failed. Exiting.");
+                    finishedWithoutInterruption = true;
+                    return;
+		}
+                localLibraryData.managerAccounts.put(currentAccount.getUsername(), (Manager) currentAccount);
 	    } else {
-                System.out.println("Please log in to an account.");
+		currentAccount = tryLoggingIn(scanner, localLibraryData);
+		if (currentAccount == null) {
+		    System.out.println("Login failed. Exiting.");
+                    finishedWithoutInterruption = true;
+                    return;
+		}
 	    }
 	    finishedWithoutInterruption = true;
 	} finally {
@@ -43,7 +53,7 @@ public class UserAndManagerTerminal extends Thread {
         String username = null;
         while (username == null) {
             System.out.print("Username: ");
-            if (!scanner.hasNext()) {
+            if (!scanner.hasNextLine()) {
                 return null;
             }
             String usernameEntered = scanner.nextLine();
@@ -58,7 +68,7 @@ public class UserAndManagerTerminal extends Thread {
         String password = null;
         while (password == null) {
             System.out.print("Password: ");
-            if (!scanner.hasNext()) {
+            if (!scanner.hasNextLine()) {
                 return null;
             }
             String passwordEntered = scanner.nextLine();
@@ -70,10 +80,42 @@ public class UserAndManagerTerminal extends Thread {
         	password = passwordEntered;
             }
         }
+        Account newAccount;
         if (isManager) {
-            return new Manager(username, password, 0); 
+            newAccount = new Manager(username, password, 0); 
+            System.out.println("The manager account " + username + " was created successfully.");
         } else {
-            return new User(username, password, 0); 
+            newAccount = new User(username, password, 0); 
+            System.out.println("The user account " + username + " was created successfully.");
+        }
+        return newAccount;
+    }
+    private Account tryLoggingIn(Scanner scanner, LocalLibraryData localLibraryData) {
+        System.out.println("Please log in to an account.");
+        Account accountToLogIn = null;
+        while (accountToLogIn == null) {
+            System.out.print("Username: ");
+            if (!scanner.hasNextLine()) {
+                return null;
+            }
+            String usernameEntered = scanner.nextLine();
+            if (!localLibraryData.userAccounts.containsKey(usernameEntered)) {
+        	System.out.println("Account not found.");
+            } else {
+        	accountToLogIn = localLibraryData.userAccounts.get(usernameEntered);
+            }
+        }
+        while (true) {
+            System.out.print("Password: ");
+            if (!scanner.hasNextLine()) {
+                return null;
+            }
+            String passwordEntered = scanner.nextLine();
+            if (!accountToLogIn.passwordEquals(passwordEntered)) {
+        	System.out.println("Password incorrect.");
+            } else {
+        	return accountToLogIn;
+            }
         }
     }
 }

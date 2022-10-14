@@ -1,15 +1,21 @@
 package cosc310_T28_librarySystem;
 
 public class Account {
-private String userName, password;
-private int type;
-public Account() {
-	
-}
-public Account(String userName, String password,int type) {
+    private String userName, password;
+    private int type;
+    public Account() {
+
+    }
+    public Account(String userName, String password,int type) {
 	super();
 	this.userName = userName;
 	this.password = password;
 	this.type = type;
-}
+    }
+    public String getUsername() {
+	return userName;
+    }
+    public boolean passwordEquals(String passwordEntered) {
+	return password.equals(passwordEntered);
+    }
 }
