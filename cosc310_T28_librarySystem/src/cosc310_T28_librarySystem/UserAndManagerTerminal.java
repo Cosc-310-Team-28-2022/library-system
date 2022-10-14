@@ -1,6 +1,14 @@
 package cosc310_T28_librarySystem;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.zip.GZIPInputStream;
 
 public class UserAndManagerTerminal extends Thread {
     LocalLibraryData localLibraryData;
@@ -131,6 +139,7 @@ public class UserAndManagerTerminal extends Thread {
         if (currentAccount instanceof Manager) {
             System.out.println("1: search for a book");
             System.out.println("2: checkout a book");
+            System.out.println("3: save session");
             if (!scanner.hasNextLine()) {
                 return null;
             }
@@ -138,6 +147,9 @@ public class UserAndManagerTerminal extends Thread {
             switch (selection) {
                 case "1":
                     searchForABook(scanner, localLibraryData);
+                    return UserOrManagerCommandResult.NEXT_COMMAND;
+                case "3":
+                    saveSession(scanner, localLibraryData);
                     return UserOrManagerCommandResult.NEXT_COMMAND;
         	default:
                     System.out.println("Selection unavailable");
@@ -150,6 +162,12 @@ public class UserAndManagerTerminal extends Thread {
         }
         return UserOrManagerCommandResult.NEXT_COMMAND;
     }
+    static enum UserOrManagerCommandResult {
+	EXIT,
+	NEXT_COMMAND,
+	LOG_OUT;
+    }
+
     private bookGroup searchForABook(Scanner scanner, LocalLibraryData localLibraryData) {
         System.out.print("Enter all or part of the title: ");
         if (!scanner.hasNextLine()) {
@@ -164,9 +182,38 @@ public class UserAndManagerTerminal extends Thread {
         System.out.println("Book not found.");
         return null;
     }
-    static enum UserOrManagerCommandResult {
-	EXIT,
-	NEXT_COMMAND,
-	LOG_OUT;
+    private void saveSession(Scanner scanner, LocalLibraryData localLibraryData) {
+	try {
+	    if (!Files.exists(Paths.get("cosc310_T28_library_system_saved_files/"))) {
+		Files.createDirectories(Paths.get("cosc310_T28_library_system_saved_files/")); // does not overwrite anyways
+	    }
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	try (
+		FileOutputStream fileOut = new FileOutputStream("cosc310_T28_library_system_saved_files/main.ser");
+//		GZIPOutputStream zipOut = new GZIPOutputStream(fileOut);
+		ObjectOutputStream out = new ObjectOutputStream(fileOut)
+		) {
+	    out.writeObject(localLibraryData);
+	} catch (IOException i) {
+	    i.printStackTrace();
+	}
+    }
+    private LocalLibraryData loadSession(Scanner scanner) {
+	if (Files.exists(Paths.get("cosc310_T28_library_system_saved_files/main.ser"))) {
+	    try (
+		    FileInputStream fileIn = new FileInputStream("cosc310_T28_library_system_saved_files/main.ser");
+		    GZIPInputStream zipIn = new GZIPInputStream(fileIn);
+		    ObjectInputStream in = new ObjectInputStream(zipIn)
+		    ) {
+		LocalLibraryData localLibraryData = (LocalLibraryData) in.readObject();
+		return localLibraryData;
+	    } catch (IOException | ClassNotFoundException c) {
+		c.printStackTrace();
+		return null;
+	    }	
+	}
+	return null;
     }
 }
