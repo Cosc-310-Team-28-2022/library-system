@@ -24,6 +24,8 @@ public class UserAndManagerTerminal extends Thread {
 	try (Scanner scanner = new Scanner(System.in)) {
 	    Account currentAccount;
 	    System.out.println("Welcoming to Team 28's Library System (version 0.1).");
+	    
+	    //log in or create first account
 	    if (localLibraryData.managerAccounts.isEmpty()) {
                 System.out.println("Currently there are no manager (librarian) accounts. Please create a manager account.");
 		currentAccount = tryCreatingAccount(scanner, true);
@@ -41,6 +43,13 @@ public class UserAndManagerTerminal extends Thread {
                     return;
 		}
 	    }
+	    
+	    //this while loop is the main loop for the user or manager to do any command
+            UserOrManagerCommandResult userOrManagerCommandResult;
+	    do {
+		userOrManagerCommandResult = askAndDoNextUserOrManagerCommand(scanner, localLibraryData, currentAccount);	
+	    } while (userOrManagerCommandResult != UserOrManagerCommandResult.EXIT);
+
 	    finishedWithoutInterruption = true;
 	} finally {
 	    if (!finishedWithoutInterruption) {
@@ -117,5 +126,48 @@ public class UserAndManagerTerminal extends Thread {
         	return accountToLogIn;
             }
         }
+    }
+    private UserOrManagerCommandResult askAndDoNextUserOrManagerCommand(Scanner scanner, LocalLibraryData localLibraryData, Account account) {
+        System.out.println("Welcome " + account.getUsername() + ". What would you like to do? Enter a number to make a selection.");
+        if (currentAccount instanceof Manager) {
+            System.out.println("1: search for a book");
+            System.out.println("2: checkout a book");
+            if (!scanner.hasNextLine()) {
+                return null;
+            }
+            String selection = scanner.nextLine();
+            switch (selection) {
+                case "1":
+                    searchForABook(scanner, localLibraryData);
+                    return UserOrManagerCommandResult.NEXT_COMMAND;
+        	default:
+                    System.out.println("Selection unavailable");
+                    return UserOrManagerCommandResult.NEXT_COMMAND;
+            }
+        } else if (currentAccount instanceof User) {
+            
+        } else {
+            throw new IllegalStateException();
+        }
+        return UserOrManagerCommandResult.NEXT_COMMAND;
+    }
+    private bookGroup searchForABook(Scanner scanner, LocalLibraryData localLibraryData) {
+        System.out.print("Enter all or part of the title: ");
+        if (!scanner.hasNextLine()) {
+            return null;
+        }
+        String titleFragment = scanner.nextLine();
+        for (bookGroup bookGroupToCompare : localLibraryData.bookGroups) {
+            if (bookGroupToCompare.getTitle().contains(titleFragment)) {
+        	return bookGroupToCompare;
+            }
+        }
+        System.out.print("Book not found.");
+        return null;
+    }
+    static enum UserOrManagerCommandResult {
+	EXIT,
+	NEXT_COMMAND,
+	LOG_OUT;
     }
 }

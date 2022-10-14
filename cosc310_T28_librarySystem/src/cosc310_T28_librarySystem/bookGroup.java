@@ -18,6 +18,9 @@ public bookGroup() {
 		this.cate=cate;
 		books=new book[num];
 		}
+	public String getTitle() {
+	    return name;
+	}
 	
 	
 	
