@@ -1,6 +1,13 @@
 package cosc310_T28_librarySystem;
 
-public class Manager extends Account{
+import java.io.Serializable;
+
+public class Manager extends Account {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public Manager() {}
     private void addBook() {}
     private void delBook() {}

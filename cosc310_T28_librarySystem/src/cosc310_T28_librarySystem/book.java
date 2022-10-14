@@ -1,6 +1,8 @@
 package cosc310_T28_librarySystem;
 
-public class book{
+import java.io.Serializable;
+
+public class book implements Serializable {
 private bookGroup bg;	
 private int ISBN, date, ID;
 private String name, author, cate;

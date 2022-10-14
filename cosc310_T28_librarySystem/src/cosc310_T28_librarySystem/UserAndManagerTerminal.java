@@ -146,7 +146,7 @@ public class UserAndManagerTerminal extends Thread {
             String selection = scanner.nextLine();
             switch (selection) {
                 case "1":
-                    searchForABook(scanner, localLibraryData);
+                    currentAccount.searchForABook(scanner, localLibraryData);
                     return UserOrManagerCommandResult.NEXT_COMMAND;
                 case "3":
                     saveSession(scanner, localLibraryData);
@@ -168,20 +168,6 @@ public class UserAndManagerTerminal extends Thread {
 	LOG_OUT;
     }
 
-    private bookGroup searchForABook(Scanner scanner, LocalLibraryData localLibraryData) {
-        System.out.print("Enter all or part of the title: ");
-        if (!scanner.hasNextLine()) {
-            return null;
-        }
-        String titleFragment = scanner.nextLine();
-        for (bookGroup bookGroupToCompare : localLibraryData.bookGroups) {
-            if (bookGroupToCompare.getTitle().contains(titleFragment)) {
-        	return bookGroupToCompare;
-            }
-        }
-        System.out.println("Book not found.");
-        return null;
-    }
     private void saveSession(Scanner scanner, LocalLibraryData localLibraryData) {
 	try {
 	    if (!Files.exists(Paths.get("cosc310_T28_library_system_saved_files/"))) {
@@ -204,8 +190,8 @@ public class UserAndManagerTerminal extends Thread {
 	if (Files.exists(Paths.get("cosc310_T28_library_system_saved_files/main.ser"))) {
 	    try (
 		    FileInputStream fileIn = new FileInputStream("cosc310_T28_library_system_saved_files/main.ser");
-		    GZIPInputStream zipIn = new GZIPInputStream(fileIn);
-		    ObjectInputStream in = new ObjectInputStream(zipIn)
+//		    GZIPInputStream zipIn = new GZIPInputStream(fileIn);
+		    ObjectInputStream in = new ObjectInputStream(fileIn)
 		    ) {
 		LocalLibraryData localLibraryData = (LocalLibraryData) in.readObject();
 		return localLibraryData;
