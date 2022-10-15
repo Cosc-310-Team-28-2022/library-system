@@ -24,6 +24,9 @@ public class UserAndManagerTerminal extends Thread {
      */
     public void run() {
 	
+	/*
+	 * NOTE: when testing make all passwords "testpassword". First username should be "test"
+	 */
 	localLibraryData = loadSession();
 	if (localLibraryData == null) {
             localLibraryData = new LocalLibraryData();
