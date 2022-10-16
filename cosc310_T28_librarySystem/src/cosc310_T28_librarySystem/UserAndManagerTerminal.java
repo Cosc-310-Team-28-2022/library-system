@@ -80,7 +80,7 @@ public class UserAndManagerTerminal extends Thread {
                 return null;
             }
             String usernameEntered = scanner.nextLine();
-            if (!usernameEntered.matches("[a-zA-Z0-9 _-]*")) {
+            if (!usernameEntered.matches("^[a-zA-Z0-9 _-]*$")) {
         	System.out.println("The username must contain only letters, numbers, _- symbols, or spaces.");
             } else if (!(1 <= usernameEntered.length() && usernameEntered.length() <= 99)) {
         	System.out.println("The username must be 1 to 99 characters long.");
@@ -97,7 +97,7 @@ public class UserAndManagerTerminal extends Thread {
                 return null;
             }
             String passwordEntered = scanner.nextLine();
-            if (!passwordEntered.matches("[a-zA-Z0-9 _-`~!@#$%^&*()=+\\[{\\]}\\\\|;:'\",<.>/?]*")) {
+            if (!passwordEntered.matches("^[a-zA-Z0-9 _-`~!@#$%^&*()=+\\[{\\]}\\\\|;:'\",<.>/?]*$")) {
         	System.out.println("The password must contain only letters, numbers, _-`~!@#$%^&*()=+[{]}\\|;:'\",<.>/? symbols, or spaces.");
             } else if (!(1 <= passwordEntered.length() && passwordEntered.length() <= 99)) {
         	System.out.println("The password must be 1 to 99 characters long.");
@@ -151,6 +151,7 @@ public class UserAndManagerTerminal extends Thread {
             System.out.println("1: search for a book");
             System.out.println("2: checkout a book");
             System.out.println("3: save session");
+            System.out.println("4: add a book");
             if (!scanner.hasNextLine()) {
                 return null;
             }
@@ -162,6 +163,8 @@ public class UserAndManagerTerminal extends Thread {
                 case "3":
                     saveSession(scanner, localLibraryData);
                     return UserOrManagerCommandResult.NEXT_COMMAND;
+                case "4":
+                    ((Manager) currentAccount).addBook(scanner, localLibraryData);
         	default:
                     System.out.println("Selection unavailable");
                     return UserOrManagerCommandResult.NEXT_COMMAND;

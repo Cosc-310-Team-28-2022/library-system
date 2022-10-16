@@ -33,9 +33,9 @@ public class Account implements Serializable{
         }
         String titleFragment = scanner.nextLine();
         boolean found = false;
-        for (bookGroup bookGroupToCompare : localLibraryData.bookGroups) {
-            if (bookGroupToCompare.getTitle().contains(titleFragment)) {
-            	System.out.println(bookGroupToCompare.getTitle());
+        for (Book book : localLibraryData.bookList) {
+            if (book.title.contains(titleFragment)) {
+            	System.out.println(book.title);
             	found = true;
             }
         }

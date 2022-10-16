@@ -2,15 +2,15 @@ package cosc310_T28_librarySystem;
 
 import java.io.Serializable;
 
-public class bookGroup implements Serializable {
+public class BookGroup implements Serializable {
 	private int ISBN, date, num;
 	private String name, author, cate;
 	//private boolean borrow[];
-	private book books[];
-public bookGroup() {
+	private Book books[];
+public BookGroup() {
 		
 	}
-	public bookGroup(int ISBN, int date, int num, String name, String author, String cate) {
+	public BookGroup(int ISBN, int date, int num, String name, String author, String cate) {
 		super();
 		this.ISBN=ISBN;
 		this.date=date;
@@ -18,7 +18,7 @@ public bookGroup() {
 		this.name=name;
 		this.author=author;
 		this.cate=cate;
-		books=new book[num];
+		books=new Book[num];
 		}
 	public String getTitle() {
 	    return name;
