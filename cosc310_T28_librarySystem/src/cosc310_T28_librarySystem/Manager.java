@@ -125,11 +125,29 @@ public class Manager extends Account {
         }
 	Book book = new Book(null, iSBN, dateOfPublication, id, title, author, category, false);
         localLibraryData.bookList.add(book);
+        localLibraryData.freeToLend.add(book);
         System.out.println("The book has been added successfully.");
     }
     void delBook() {}
     void searchUser() {}
     void changeStatus() {}
+    void checkoutBook(Scanner scanner, LocalLibraryData localLibraryData) {
+	Book bookToCheckout = searchForABook(scanner, localLibraryData, true);
+	if (bookToCheckout == null) {
+	    return;
+	}
+	if (localLibraryData.freeToLend.contains(bookToCheckout)) {
+	    localLibraryData.freeToLend.remove(bookToCheckout);
+	    localLibraryData.lended.add(bookToCheckout);
+	    System.out.println("Checkout successful. Title = " + bookToCheckout.title + " ISBN = " + bookToCheckout.iSBN);
+	} else if (localLibraryData.readyToLend.contains(bookToCheckout)) {
+	    localLibraryData.readyToLend.remove(bookToCheckout);
+	    localLibraryData.lended.add(bookToCheckout);
+	    System.out.println("Checkout successful. Title = " + bookToCheckout.title + " ISBN = " + bookToCheckout.iSBN);
+	} else {
+	    System.out.println("Sorry, this book seems to be already lended. Maybe return it first.");
+	}
+    }
     public Manager(String userName, String password, int type) {
 	super(userName, password, type);
     }

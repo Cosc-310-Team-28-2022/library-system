@@ -158,16 +158,20 @@ public class UserAndManagerTerminal extends Thread {
             String selection = scanner.nextLine();
             switch (selection) {
                 case "1":
-                    currentAccount.searchForABook(scanner, localLibraryData);
-                    return UserOrManagerCommandResult.NEXT_COMMAND;
+                    currentAccount.searchForABook(scanner, localLibraryData, false);
+                    break;
+                case "2":
+                    ((Manager) currentAccount).checkoutBook(scanner, localLibraryData);
+                    break;
                 case "3":
                     saveSession(scanner, localLibraryData);
-                    return UserOrManagerCommandResult.NEXT_COMMAND;
+                    break;
                 case "4":
                     ((Manager) currentAccount).addBook(scanner, localLibraryData);
+                    break;
         	default:
                     System.out.println("Selection unavailable");
-                    return UserOrManagerCommandResult.NEXT_COMMAND;
+                    break;
             }
         } else if (currentAccount instanceof User) {
             

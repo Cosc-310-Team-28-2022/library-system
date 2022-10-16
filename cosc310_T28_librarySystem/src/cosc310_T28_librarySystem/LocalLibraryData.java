@@ -16,7 +16,7 @@ public class LocalLibraryData implements Serializable {
   	public HashMap<String, Manager> managerAccounts;
 	public ArrayList<Book> bookList;
 	public ArrayList<Book> freeToLend;
-	public ArrayList<Book> ReadyToLend;
+	public ArrayList<Book> readyToLend;
 	public ArrayList<Book> lended;
 	
   public LocalLibraryData() {
@@ -25,7 +25,7 @@ public class LocalLibraryData implements Serializable {
     managerAccounts = new HashMap<>();
     bookList = new ArrayList<>();
     freeToLend = new ArrayList<>();
-    ReadyToLend = new ArrayList<>();
+    readyToLend = new ArrayList<>();
     lended = new ArrayList<>();
   }
 
