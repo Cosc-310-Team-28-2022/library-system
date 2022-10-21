@@ -13,4 +13,16 @@ Other classes like main and UserAndManagerTerminal are not Serializable, but all
 
 The Account class is the subclass for User and Manager. Any activity both library users and library managers can do, such as searching a book, is implemented by this class.
 
-Each Manager object stores the username and password for one library manager account, and implements activities only managers can do, such as checking out
+Each Manager object stores the username and password for one library manager account, and implements activities only managers can do, such as adding books and checking out books.
+
+Each User object stores the username and password and other information for one library user account, and has no methods.
+
+Each Book object stores the information about one book, and has no methods.
+
+Each BookGroup object is a subcategory which stores related books e.g. multiple volumes, and has no methods.
+
+The LocalLibraryData stores the entire collection of these objects in ArrayList and HashMap collections, and currently has no methods.
+
+The main class currently just creates a UserAndManagerTerminal and starts it.
+
+The UserAndManagerTerminal is a Thread which communicates with the user using text through the standard input and standard output. It lets the person interacting with the program log in or create an account, and it goes into a loop asking him for the next action. When the program starts it also loads the LocalLibraryData from a text file if avaiable and allows the person (user or manager) to save it to the text file.
