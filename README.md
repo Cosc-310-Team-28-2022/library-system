@@ -13,6 +13,8 @@ Some classes like Account, Book, BookGroup, Manager, and User are Serializable. 
 
 Other classes like main and UserAndManagerTerminal are not Serializable, but allow us to run code and call other methods.
 
+### Serializable classes
+
 The Account class is the subclass for User and Manager. Any activity both library users and library managers can do, such as searching a book, is implemented by this class.
 
 Each Manager object stores the username and password for one library manager account, and implements activities only managers can do, such as adding books and checking out books.
@@ -24,6 +26,8 @@ Each Book object stores the information about one book, and has no methods.
 Each BookGroup object is a subcategory which stores related books e.g. multiple volumes, and has no methods.
 
 The LocalLibraryData stores the entire collection of these objects in ArrayList and HashMap collections, and currently has no methods.
+
+### Other classes
 
 The main class currently just creates a UserAndManagerTerminal and starts it.
 
