@@ -25,4 +25,4 @@ The LocalLibraryData stores the entire collection of these objects in ArrayList 
 
 The main class currently just creates a UserAndManagerTerminal and starts it.
 
-The UserAndManagerTerminal is a Thread which communicates with the user using text through the standard input and standard output. It lets the person interacting with the program log in or create an account, and it goes into a loop asking him for the next action. When the program starts, it also loads the LocalLibraryData from a text file if avaiable and allows the person (user or manager) to save it to the text file.
+The UserAndManagerTerminal is a Thread which communicates with the user using text through the standard input and standard output. It lets the person interacting with the program log in or create an account, and it goes into a loop asking him for the next action. When the program starts, it also loads the LocalLibraryData from a text file if avaiable and allows the person (user or manager) to save it to the text file any time.
