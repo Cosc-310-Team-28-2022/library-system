@@ -1,6 +1,8 @@
 # library-system
 This is an integrated library system that a library can use to keep track of books and help users find books. It will keep track of every single book when it is lent out and returned. It will allow users to search for books by title, using only part of the title. It will allow librarians to create accounts. And it will generate reports. The main limitations are that the first version of the program will run on a single computer in a single library. The first version will also use a command line instead of a GUI. The first version will not encrypt the information and assume the computer it runs on is secure or under supervision.
 
+Currently it is only a demo and not complete.
+
 ## Compiling and running
 One way to compile it is to use Eclipse. First navigate to https://github.com/Cosc-310-Team-28-2022/library-system. Click on the "Code" button on Github and select "Download ZIP". Open Eclipse (install if necessary) and click "File", "Import", "General", "Projects from Folder or Archive". Make sure "Search for nested projects" is on. Click the "Archive..." not "Directory..." button, and find where you downloaded "library-system-main.zip" to. Maybe three projects will be listed. Uncheck all the boxes but check the box for project "library-system-main.zip_expanded/library-system-main/cosc310_T28_librarySystem". Click finish.
 
