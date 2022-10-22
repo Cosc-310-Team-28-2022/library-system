@@ -1,23 +1,29 @@
 package cosc310_T28_librarySystem;
 
-public class User extends Account{
 /**
+ * 
+ * @author Team 28
+ *
+ *         Each User object stores the username and password and other
+ *         information for one library user account, and has no methods.
+ */
+public class User extends Account {
+    /**
      * 
      */
     private static final long serialVersionUID = 1L;
-	//private String name;
-	private Book borrow_books[];
-	private int borrow_num;
-	private final int max_borrow=3;
-	
-	public User(String userName, String password, int type) {
-	    super(userName, password, type);
+    // private String name;
+    private Book borrow_books[];
+    private int borrow_num;
+    private final int max_borrow = 3;
 
-	    borrow_books=new Book[max_borrow];
-	}
+    public User(String userName, String password, int type) {
+	super(userName, password, type);
 
+	borrow_books = new Book[max_borrow];
+    }
 
-	private void searchBook() {}
-
+    private void searchBook() {
+    }
 
 }
