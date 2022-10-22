@@ -3,33 +3,46 @@ package cosc310_T28_librarySystem;
 import java.io.Serializable;
 import java.util.Scanner;
 
-public class Account implements Serializable{
+/**
+ * 
+ * @author Team 28
+ * 
+ *         The Account class is the subclass for User and Manager. Any activity
+ *         both library users and library managers can do, such as searching a
+ *         book, is implemented by this class.
+ */
+public class Account implements Serializable {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
     private String userName, password;
     private int type;
+
     public Account() {
 
     }
-    public Account(String userName, String password,int type) {
+
+    public Account(String userName, String password, int type) {
 	super();
 	this.userName = userName;
 	this.password = password;
 	this.type = type;
     }
+
     public String getUsername() {
 	return userName;
     }
+
     public boolean passwordEquals(String passwordEntered) {
 	return password.equals(passwordEntered);
     }
-    
+
     /**
-     * Lists books which matches a search (if selectOneBook is false),
-     * or lists books which matches a search and returns a single book (if selectOneBook is true).
-     * Returning a single book is useful for checking out a book, etc.
+     * Lists books which matches a search (if selectOneBook is false), or lists
+     * books which matches a search and returns a single book (if selectOneBook is
+     * true). Returning a single book is useful for checking out a book, etc.
+     * 
      * @param scanner
      * @param localLibraryData
      * @param selectOneBook
@@ -64,16 +77,16 @@ public class Account implements Serializable{
 		    return null;
 		}
 		String iSBNEntered = scanner.nextLine();
-                iSBNEntered.replaceAll("-", ""); //delete dashes
+		iSBNEntered.replaceAll("-", ""); // delete dashes
 		for (Book book : localLibraryData.bookList) {
-		    if (iSBNEntered.equals(""+bookFound.iSBN)) {
+		    if (iSBNEntered.equals("" + bookFound.iSBN)) {
 			return book;
 		    }
 		}
-                System.out.println("Book not found.");
+		System.out.println("Book not found.");
 	    }
 	}
 	return null;
     }
- 
+
 }
