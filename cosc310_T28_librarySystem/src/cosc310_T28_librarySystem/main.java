@@ -6,6 +6,7 @@ public class main {
 	
 	  UserAndManagerTerminal terminal = new UserAndManagerTerminal();
 	  terminal.start();
+	  
 		
 	}
 

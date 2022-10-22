@@ -23,24 +23,74 @@ public class UserAndManagerTerminal extends Thread {
      * This function is automatically run by the thread after start() is called.
      */
     public void run() {
-	
 	/*
 	 * NOTE: when testing make all passwords "testpassword". First username should be "test"
 	 */
-	localLibraryData = loadSession();
-	if (localLibraryData == null) {
-            localLibraryData = new LocalLibraryData();
-	}
-	
-	boolean finishedWithoutInterruption = false; // this boolean tells the try-finally clause whether
+		boolean finishedWithoutInterruption = false; // this boolean tells the try-finally clause whether
 						     // scanner.hasNextLine()
 						     // failed
+    
 	try (Scanner scanner = new Scanner(System.in)) {
-	    Account currentAccount;
+        
+        localLibraryData = loadSession();
+        if (localLibraryData == null) {
+                localLibraryData = new LocalLibraryData();
+        }
+
+	    Account currentAccount=null;
 	    System.out.println("Welcoming to Team 28's Library System (version 0.1).");
 	    
+
+        System.out.println("Library User please enter 1, Manager (Librarian) please enter 2.");
+        boolean isManager=true;
+
+        String AccountTypeSelection = scanner.nextLine(); //Judge user type
+        while(!AccountTypeSelection.equals("1")&&!AccountTypeSelection.equals("2")){
+            System.out.println("Please only enter 1 or 2.");
+            AccountTypeSelection = scanner.nextLine();
+        }
+        switch (AccountTypeSelection) {
+            case "1":
+            isManager=false;
+                break;
+            case "2":
+            isManager=true;
+                break;
+        }
+        System.out.println("Log in to an account, please enter 1.\nCreate a new account, please enter 2.");
+        String LogInTypeSelection = scanner.nextLine(); //Select to log in or create an account
+        while(!LogInTypeSelection.equals("1")&&!LogInTypeSelection.equals("2")){
+            System.out.println("Please only enter 1 or 2.");
+            LogInTypeSelection = scanner.nextLine();
+        }
+        
+        switch (LogInTypeSelection) {   
+            case "1":
+            currentAccount = tryLoggingIn(scanner, localLibraryData);
+            if (currentAccount == null) {
+                System.out.println("Login failed. Exiting.");
+                        finishedWithoutInterruption = true;
+                        return;
+            }
+                break;
+            case "2":
+            currentAccount = tryCreatingAccount(scanner, localLibraryData, isManager);
+            if (currentAccount == null) {
+                System.out.println("Account creation failed. Exiting.");
+                        finishedWithoutInterruption = true;
+                        return;
+            }
+            if(isManager)
+            localLibraryData.managerAccounts.put(currentAccount.getUsername(), (Manager) currentAccount);
+            else
+            localLibraryData.userAccounts.put(currentAccount.getUsername(), (User)currentAccount);
+            
+                break;
+            }
+            
+        // Old log in part:
 	    //log in or create first account
-	    if (localLibraryData.managerAccounts.isEmpty()) {
+/* 	    if (localLibraryData.managerAccounts.isEmpty()) {
                 System.out.println("Currently there are no manager (librarian) accounts. Please create a manager account.");
 		currentAccount = tryCreatingAccount(scanner, localLibraryData, true);
 		if (currentAccount == null) {
@@ -56,7 +106,7 @@ public class UserAndManagerTerminal extends Thread {
                     finishedWithoutInterruption = true;
                     return;
 		}
-	    }
+	    }*/
 	    
 	    //this while loop is the main loop for the user or manager to do any command
             UserOrManagerCommandResult userOrManagerCommandResult;
@@ -78,7 +128,7 @@ public class UserAndManagerTerminal extends Thread {
             System.out.print("Username: ");
             if (!scanner.hasNextLine()) {
                 return null;
-            }
+            } 
             String usernameEntered = scanner.nextLine();
             if (!usernameEntered.matches("^[a-zA-Z0-9 _-]*$")) {
         	System.out.println("The username must contain only letters, numbers, _- symbols, or spaces.");
@@ -107,10 +157,10 @@ public class UserAndManagerTerminal extends Thread {
         }
         Account newAccount;
         if (isManager) {
-            newAccount = new Manager(username, password, 0); 
+            newAccount = new Manager(username, password, 2); //name manager type to '2'
             System.out.println("The manager account " + username + " was created successfully.");
         } else {
-            newAccount = new User(username, password, 0); 
+            newAccount = new User(username, password, 1);    //name user type to '1'
             System.out.println("The user account " + username + " was created successfully.");
         }
         return newAccount;
@@ -174,7 +224,33 @@ public class UserAndManagerTerminal extends Thread {
                     break;
             }
         } else if (currentAccount instanceof User) {
-            
+            //User function should change later, keep search and checkout, save should automatic execution when the program ends
+            //add function should delete, add a quit function.
+            System.out.println("1: search for a book");
+            System.out.println("2: checkout a book");
+            System.out.println("3: save session");
+            System.out.println("4: add a book");
+            if (!scanner.hasNextLine()) {
+                return null;
+            }
+            String selection = scanner.nextLine();
+            switch (selection) {
+                case "1":
+                    currentAccount.searchForABook(scanner, localLibraryData, false);
+                    break;
+                case "2":
+                    ((Manager) currentAccount).checkoutBook(scanner, localLibraryData);
+                    break;
+                case "3":
+                    saveSession(scanner, localLibraryData);
+                    break;
+                case "4":
+                    ((Manager) currentAccount).addBook(scanner, localLibraryData);
+                    break;
+        	default:
+                    System.out.println("Selection unavailable");
+                    break;
+            }
         } else {
             throw new IllegalStateException();
         }
