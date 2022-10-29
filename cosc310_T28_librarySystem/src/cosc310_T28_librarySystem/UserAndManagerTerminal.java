@@ -229,7 +229,7 @@ public class UserAndManagerTerminal extends Thread {
             System.out.println("1: search for a book");
             System.out.println("2: checkout a book");
             System.out.println("3: save session");
-            System.out.println("4: add a book");
+            
             if (!scanner.hasNextLine()) {
                 return null;
             }
@@ -239,13 +239,10 @@ public class UserAndManagerTerminal extends Thread {
                     currentAccount.searchForABook(scanner, localLibraryData, false);
                     break;
                 case "2":
-                    ((Manager) currentAccount).checkoutBook(scanner, localLibraryData);
+                    ((User) currentAccount).borrowBook(scanner, localLibraryData);
                     break;
                 case "3":
                     saveSession(scanner, localLibraryData);
-                    break;
-                case "4":
-                    ((Manager) currentAccount).addBook(scanner, localLibraryData);
                     break;
         	default:
                     System.out.println("Selection unavailable");
