@@ -156,7 +156,7 @@ public class Manager extends Account {
 		System.out.println("No book will be lend.");
 		}else{
 		for(int i=1;i<=localLibraryData.readyToLend.size();i++){
-		System.out.println(i+": "+localLibraryData.readyToLend.get(i-1).title);
+		System.out.println(i+": "+localLibraryData.readyToLend.get(i-1).title+" "+localLibraryData.readyToLend.get(i-1).iSBN+" "+localLibraryData.readyToLend.get(i-1).holder.getUsername());
 	}
 		
 	System.out.println("Choose the id(number before the book) of book you want to select: ");
@@ -174,23 +174,17 @@ public class Manager extends Account {
     }
 	Book wantToLend = localLibraryData.readyToLend.get(Integer.valueOf(enter)-1);
 	System.out.println("Sure to Lend this book: Title = " + wantToLend.title + " ISBN = " + wantToLend.iSBN+"?");
-    boolean df;
-	while(true){
-        String define = scanner.nextLine();
-        if(define.equals(String.valueOf('Y'))||define.equals(String.valueOf('N'))){
-            if(define.equals(String.valueOf('Y'))){
-                df=true;
-                break;
-        }
-        else{
-            df=false;
-            break;
-        }
-    }
-        else
-        System.out.println("Please enter 'Y' or 'N'");
-    }
-	if(df=true){
+    boolean df=false;
+	String define = scanner.nextLine();
+	while(!define.equals("Y")&& !define.equals("N")){
+		System.out.println("Please enter 'Y' or 'N'");
+		define = scanner.nextLine();
+	}
+	if(define.equals("Y"))
+	df=true;
+	else if(define.equals("N"))
+	df=false;
+	if(df==true){
 		wantToLend.borrow=true;
 		localLibraryData.readyToLend.remove(wantToLend);
 		localLibraryData.lended.add(wantToLend);

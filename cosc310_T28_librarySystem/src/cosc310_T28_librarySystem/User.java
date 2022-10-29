@@ -45,8 +45,18 @@ public class User extends Account {
     
     Book wantToBorrow = bookFoundlist.get(Integer.valueOf(enter)-1);
     System.out.println("Sure to borrow book: Title = " + wantToBorrow.title + " ISBN = " + wantToBorrow.iSBN+"?");
-    boolean df;
-    while(true){
+    boolean df=false;
+    String define = scanner.nextLine();
+    while(!define.equals("Y")&& !define.equals("N")){
+            System.out.println("Please enter 'Y' or 'N'");
+            define = scanner.nextLine();
+        }
+    if(define.equals("Y"))
+        df=true;
+    else if(define.equals("N"))
+        df=false;
+
+   /* while(true){
         String define = scanner.nextLine();
         if(define.equals(String.valueOf('Y'))||define.equals(String.valueOf('N'))){
             if(define.equals(String.valueOf('Y'))){
@@ -60,14 +70,15 @@ public class User extends Account {
     }else{
         System.out.println("Please enter 'Y' or 'N'");
     }
-    }
-    if(df=true){
+    }*/
+    if(df==true){
         if(borrow_num>=3){
             System.out.println("You have already borrow "+borrow_num+" book(s)! Cannot borrow more.");
             return null;
         }else{
         if (localLibraryData.freeToLend.contains(wantToBorrow)) {
             localLibraryData.freeToLend.remove(wantToBorrow);
+            wantToBorrow.holder=User.this;
             localLibraryData.readyToLend.add(wantToBorrow);
             System.out.println("You order to borrow book: Title = " + wantToBorrow.title + " ISBN = " + wantToBorrow.iSBN+" is received.\nPlease Please go to the library to get it later");
             for(int i=0;i<max_borrow;i++){
@@ -79,7 +90,7 @@ public class User extends Account {
             }
             return wantToBorrow;
     }else{
-            System.out.println("Error when borrow book.");
+            System.out.println("Sorry, this book is not free.");
         return null;
     }
     }
