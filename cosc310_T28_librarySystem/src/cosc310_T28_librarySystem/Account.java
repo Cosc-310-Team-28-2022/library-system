@@ -1,6 +1,7 @@
 package cosc310_T28_librarySystem;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -48,7 +49,7 @@ public class Account implements Serializable {
      * @param selectOneBook
      * @return
      */
-    Book searchForABook(Scanner scanner, LocalLibraryData localLibraryData, boolean selectOneBook) {
+    ArrayList<Book> searchForABook(Scanner scanner, LocalLibraryData localLibraryData, boolean selectOneBook) {
 	System.out.print("Enter all or part of the title: ");
 	if (!scanner.hasNextLine()) {
 	    return null;
@@ -59,16 +60,25 @@ public class Account implements Serializable {
 
 	int numberFound = 0;
 	Book bookFound = null;
+	ArrayList<Book> bookFoundlist = new ArrayList<>();
+	int i=1;
 	for (Book book : localLibraryData.bookList) {
 	    if (book.title.contains(titleFragment)) {
-		System.out.println(book.title + " ISBN: " + book.iSBN);
+		System.out.println(i+": "+book.title + " ISBN: " + book.iSBN);
 		bookFound = book;
+		bookFoundlist.add(bookFound);
+		i++;
 		numberFound++;
 	    }
 	}
 	if (numberFound == 0) {
 	    System.out.println("Book not found.");
-	} else if (selectOneBook) {
+		return null;
+	} 
+	else{
+	return bookFoundlist;
+	}
+	/*else if (selectOneBook) {
 	    if (numberFound == 1) {
 		return bookFound;
 	    } else {
@@ -85,8 +95,8 @@ public class Account implements Serializable {
 		}
 		System.out.println("Book not found.");
 	    }
-	}
-	return null;
+	}*/
+	
     }
 
 }
