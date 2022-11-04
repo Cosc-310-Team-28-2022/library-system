@@ -181,6 +181,7 @@ public class UserAndManagerTerminal extends Thread {
         	accountToLogIn = localLibraryData.userAccounts.get(usernameEntered);
             } else {
         	System.out.println("Account not found.");
+            return null;
             }
         }
         while (true) {
@@ -200,11 +201,11 @@ public class UserAndManagerTerminal extends Thread {
         System.out.println("Welcome " + currentAccount.getUsername() + ". What would you like to do? Enter a number to make a selection.");
         if (currentAccount instanceof Manager) {
             System.out.println("1: search for a book");
-            System.out.println("2: checkout a book");
+            System.out.println("2: checkout book on hold to lend");
             System.out.println("3: save session");
-            System.out.println("4: add a book");
+            System.out.println("4: add a new book from library");
             System.out.println("5: delete a book");
-            System.out.println("6: return a book");
+            System.out.println("6: return a lended book");
             if (!scanner.hasNextLine()) {
                 return null;
             }
@@ -236,7 +237,7 @@ public class UserAndManagerTerminal extends Thread {
             //User function should change later, keep search and checkout, save should automatic execution when the program ends
             //add function should delete, add a quit function.
             System.out.println("1: search for a book");
-            System.out.println("2: checkout a book");
+            System.out.println("2: apply to lend a book");
             System.out.println("3: save session");
             
             if (!scanner.hasNextLine()) {

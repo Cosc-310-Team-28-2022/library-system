@@ -90,7 +90,7 @@ public class User extends Account {
             }
             return wantToBorrow;
     }else{
-            System.out.println("Sorry, this book is not free.");
+            System.out.println("Sorry, this book has been lended.");
         return null;
     }
     }

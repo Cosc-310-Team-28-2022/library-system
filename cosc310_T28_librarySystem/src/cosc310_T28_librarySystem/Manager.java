@@ -254,7 +254,7 @@ public class Manager extends Account {
             System.out.println("Please enter a number: ");
     }
 	Book wantToLend = localLibraryData.readyToLend.get(Integer.valueOf(enter)-1);
-	System.out.println("Sure to Lend this book: Title = " + wantToLend.title + " ISBN = " + wantToLend.iSBN+"?");
+	System.out.println("Sure to Lend out this book: Title = " + wantToLend.title + " ISBN = " + wantToLend.iSBN+"?");
     boolean df=false;
 	String define = scanner.nextLine();
 	while(!define.equals("Y")&& !define.equals("N")){
