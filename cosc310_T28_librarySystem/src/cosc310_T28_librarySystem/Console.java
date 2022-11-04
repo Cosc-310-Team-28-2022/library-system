@@ -91,12 +91,19 @@ public class Console {
 
         consoleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel consolePane = new JPanel();
+        JPanel consolePane = new JPanel() {
+	    @Override
+	    public Dimension getPreferredSize() {
+		Dimension size = super.getPreferredSize();
+		size.width = 1; // force it to be small and expand, causes line wrap
+		return size;
+	    }
+        };
         consolePane.setLayout(new BorderLayout());
         consolePane.add(outputPane,BorderLayout.CENTER);
         consolePane.add(inputField,BorderLayout.SOUTH);
 
-	JScrollPane scroll = new JScrollPane() {
+	JScrollPane scroll = new JScrollPane(consolePane) {
 	    @Override
 	    public Dimension getPreferredSize() {
 		Dimension size = super.getPreferredSize();
@@ -126,14 +133,13 @@ public class Console {
 	    public void componentHidden(ComponentEvent e) {
 	    }
 	});
-	scroll.setViewportView(consolePane);
 	consoleFrame.add(scroll);
 	consoleFrame.pack();
 
+	// make inputField focused by default
 	// credit:
 	// http://www.java2s.com/Code/Java/Event/SettingtheInitialFocusedComponentinaWindow.htm
 	inputField.addHierarchyListener(new HierarchyListener() {
-
 	    @Override
 	    public void hierarchyChanged(HierarchyEvent e) {
 		inputField.requestFocus();

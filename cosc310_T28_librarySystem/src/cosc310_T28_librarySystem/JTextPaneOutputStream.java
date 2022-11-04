@@ -156,9 +156,13 @@ class JTextPaneOutputStream extends OutputStream {
 
 			lengths.addLast(curLength);
 			curLength = 0;
+			
+			newLine = false;
 		    }
 		    if (val.endsWith(EOL1) || val.endsWith(EOL2)) {
-			val = val.replaceAll("[" + EOL1 + EOL2 + "]$", "");
+			String newVal1 = val.replaceAll(EOL1 + "$", "");
+			String newVal2 = val.replaceAll(EOL2 + "$", "");
+			val = (newVal1.length() <= newVal2.length()) ? newVal1 : newVal2;
 			newLine = true;
 		    }
 		    curLength += val.length();
