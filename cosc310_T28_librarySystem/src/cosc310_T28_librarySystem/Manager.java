@@ -145,6 +145,9 @@ public class Manager extends Account {
 
     void delBook(Scanner scanner, LocalLibraryData localLibraryData) {
 		ArrayList<Book> bookDeleteList = searchForABook(scanner, localLibraryData,true);
+		
+		if(bookDeleteList!=null){
+
 		System.out.println("Choose the id(number before the book) of book you want to delete: ");
 
 		int enter;
@@ -174,10 +177,11 @@ public class Manager extends Account {
 
 		if(df==true){
 			localLibraryData.bookList.remove(wantToDelete);
+			System.out.println(wantToDelete.title+" is delete.");
 		}else{
 			System.out.println("Delete stop.");
 		}
-
+	}
     }
 
     void searchUser(Scanner scanner, LocalLibraryData localLibraryData) {
