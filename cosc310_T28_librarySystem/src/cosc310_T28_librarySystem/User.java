@@ -25,7 +25,7 @@ public class User extends Account {
 	borrow_books = new Book[max_borrow];
     }
 
-     Book borrowBook(Scanner scanner, LocalLibraryData localLibraryData) {
+    Book borrowBook(Scanner scanner, LocalLibraryData localLibraryData) {
     ArrayList<Book> bookFoundlist = searchForABook(scanner,localLibraryData,true);
     System.out.println("Choose the id(number before the book) of book you want to select: ");
     if (!scanner.hasNextLine()) {
@@ -98,5 +98,12 @@ public class User extends Account {
         System.out.println("Borrow stop.");
     }
     return null;
+    }
+
+    void orderList(){
+        for(int i=0;i<borrow_books.length;i++){
+        if(borrow_books[i]!=null)
+            System.out.print(borrow_books[i].title);
+        }
     }
 }
