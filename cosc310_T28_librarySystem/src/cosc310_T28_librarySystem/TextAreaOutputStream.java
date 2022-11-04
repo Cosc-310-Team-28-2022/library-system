@@ -87,6 +87,7 @@ class TextAreaOutputStream extends OutputStream {
 	private int curLength; // length of current line
 	private boolean clear;
 	private boolean queue;
+	private boolean newLine; // instead of always having an empty line at the bottom, remember whether there is new line as boolean
 
 	Appender(JTextArea txtara, int maxlin) {
 	    textArea = txtara;
@@ -97,6 +98,7 @@ class TextAreaOutputStream extends OutputStream {
 	    curLength = 0;
 	    clear = false;
 	    queue = true;
+	    newLine = false;
 	}
 
 	synchronized void append(String val) {
@@ -112,6 +114,7 @@ class TextAreaOutputStream extends OutputStream {
 	    curLength = 0;
 	    lengths.clear();
 	    values.clear();
+	    newLine = false;
 	    if (queue) {
 		queue = false;
 		EventQueue.invokeLater(this);
@@ -124,14 +127,22 @@ class TextAreaOutputStream extends OutputStream {
 		textArea.setText("");
 	    }
 	    for (String val : values) {
-		curLength += val.length();
-		if (val.endsWith(EOL1) || val.endsWith(EOL2)) {
+		if (newLine) {
 		    if (lengths.size() >= maxLines) {
 			textArea.replaceRange("", 0, lengths.removeFirst());
 		    }
+
+                    curLength += EOL1.length();
+		    textArea.append(EOL1);
+
 		    lengths.addLast(curLength);
 		    curLength = 0;
 		}
+		if (val.endsWith(EOL1) || val.endsWith(EOL2)) {
+                    val = val.replaceAll("[" + EOL1 + EOL2 + "]$", "");
+                    newLine = true;
+		}
+		curLength += val.length();
 		textArea.append(val);
 	    }
 	    values.clear();
