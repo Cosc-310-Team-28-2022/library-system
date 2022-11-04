@@ -30,7 +30,7 @@ import javax.swing.SwingUtilities;
  * Edited to add different colours and output stream for System.setOut()
  *
  */
-public class NewConsole {
+public class Console {
 
     private JFrame consoleFrame;
     private JTextPane outputPane;
@@ -158,31 +158,31 @@ public class NewConsole {
     }
 
 
-    public static void main(String[] args) {
-        try {
-            //Run GUI Creation code on the AWT Event dispatching thread.
-            //Needs to use invoke and wait otherwise scanner created on System.in might fail
-	    SwingUtilities.invokeAndWait(new Runnable() {
-	        @Override
-	        public void run() {
-	            NewConsole console = new NewConsole();
-	            console.create();
-	        }
-	    });
-	} catch (InvocationTargetException | InterruptedException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-        new Thread() {
-            public void run() {
-        	
-        	try (Scanner s = new Scanner(System.in)) {
-        	    while (s.hasNextLine()) {
-        		String line = s.nextLine();
-        		System.out.println("Program recieved input: "+line);
-        	    }
-        	}
-            }
-        }.start();
-    }
+//    public static void main(String[] args) {
+//        try {
+//            //Run GUI Creation code on the AWT Event dispatching thread.
+//            //Needs to use invoke and wait otherwise scanner created on System.in might fail
+//	    SwingUtilities.invokeAndWait(new Runnable() {
+//	        @Override
+//	        public void run() {
+//	            Console console = new Console();
+//	            console.create();
+//	        }
+//	    });
+//	} catch (InvocationTargetException | InterruptedException e) {
+//	    // TODO Auto-generated catch block
+//	    e.printStackTrace();
+//	}
+//        new Thread() {
+//            public void run() {
+//        	
+//        	try (Scanner s = new Scanner(System.in)) {
+//        	    while (s.hasNextLine()) {
+//        		String line = s.nextLine();
+//        		System.out.println("Program recieved input: "+line);
+//        	    }
+//        	}
+//            }
+//        }.start();
+//    }
 }
