@@ -29,6 +29,7 @@ public class UserAndManagerTerminal extends Thread {
 		boolean finishedWithoutInterruption = false; // this boolean tells the try-finally clause whether
 						     // scanner.hasNextLine()
 						     // failed
+	new Console().create();
     
 	try (Scanner scanner = new Scanner(System.in)) {
         
