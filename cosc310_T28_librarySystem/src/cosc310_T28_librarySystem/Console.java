@@ -1,8 +1,9 @@
 package cosc310_T28_librarySystem;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -13,15 +14,12 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
 
 /**
  * 
@@ -99,9 +97,28 @@ public class Console {
 		return size;
 	    }
         };
-        consolePane.setLayout(new BorderLayout());
-        consolePane.add(outputPane,BorderLayout.CENTER);
-        consolePane.add(inputField,BorderLayout.SOUTH);
+        GridBagConstraints layoutConstraints = new GridBagConstraints();
+        consolePane.setLayout(new GridBagLayout());
+        layoutConstraints.gridx = 0;
+        layoutConstraints.gridy = 0;
+        layoutConstraints.fill = GridBagConstraints.BOTH;
+        layoutConstraints.weightx = 1;
+        layoutConstraints.weighty = 1;
+        JPanel whiteSpacePanel = new JPanel();
+        whiteSpacePanel.setBackground(Color.WHITE);
+        consolePane.add(whiteSpacePanel, layoutConstraints);
+        layoutConstraints.gridx = 0;
+        layoutConstraints.gridy = 1;
+        layoutConstraints.fill = GridBagConstraints.HORIZONTAL;
+        layoutConstraints.weightx = 1;
+        layoutConstraints.weighty = 0;
+        consolePane.add(outputPane, layoutConstraints);
+        layoutConstraints.gridx = 0;
+        layoutConstraints.gridy = 2;
+        layoutConstraints.fill = GridBagConstraints.HORIZONTAL;
+        layoutConstraints.weightx = 1;
+        layoutConstraints.weighty = 0;
+        consolePane.add(inputField, layoutConstraints);
 
 	JScrollPane scroll = new JScrollPane(consolePane) {
 	    @Override
