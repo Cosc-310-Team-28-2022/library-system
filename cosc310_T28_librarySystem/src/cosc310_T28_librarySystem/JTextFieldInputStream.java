@@ -14,44 +14,18 @@ import javax.swing.JTextField;
 
 /**
  * 
- * @author user1406062
+ * @author Team 28, some lines copied from user1406062 at Stack Overflow
  * https://stackoverflow.com/questions/12669368/java-how-to-extend-inputstream-to-read-from-a-jtextfield
  *
  */
-public class JTextFieldInputStream extends InputStream {
-    byte[] contents = new byte[0];
-    int pointer = 0;
-
-    public JTextFieldInputStream(final JTextField text) {
-
-        text.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if(e.getKeyChar()=='\n'){
-                    contents = text.getText().getBytes();
-                    pointer = 0;
-                    text.setText("");
-                }
-                super.keyReleased(e);
-            }
-        });
-    }
-
-    @Override
-    public int read() throws IOException {
-        if(pointer >= contents.length) return -1;
-        return this.contents[pointer++];
-    }
-    
-}
-class MyInputStream extends BufferedInputStream {
+class MyJTextFieldInputStream extends BufferedInputStream {
     PipedInputStream inputStreamToClose;
     LinkedList<byte[]> pastLines = new LinkedList<byte[]>(); //simplifies removing first?
     int readerPosition;
     JTextField textField;
     PrintWriter printWriterToClose;
     PipedOutputStream outputStreamToClose;
-    public MyInputStream(final JTextField textField, PipedInputStream nullParameter) throws IOException {
+    public MyJTextFieldInputStream(final JTextField textField, PipedInputStream nullParameter) throws IOException {
 	//somehow have to use a null parameter because not allowed to write anything before super()
 	super(nullParameter = new PipedInputStream());
 	inputStreamToClose = nullParameter;
@@ -60,6 +34,10 @@ class MyInputStream extends BufferedInputStream {
 	outputStreamToClose = new PipedOutputStream(inputStreamToClose);
 	printWriterToClose = new PrintWriter(outputStreamToClose);
 
+	/*
+	 * key listener idea copied from
+	 * https://stackoverflow.com/questions/12669368/java-how-to-extend-inputstream-to-read-from-a-jtextfield
+	 */
         textField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -76,6 +54,7 @@ class MyInputStream extends BufferedInputStream {
     @Override
     public void close() throws IOException {
 	super.close();
+	inputStreamToClose.close();
 	printWriterToClose.close();
 	outputStreamToClose.close();
     }

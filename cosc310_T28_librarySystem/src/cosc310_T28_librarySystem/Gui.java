@@ -18,6 +18,20 @@ import javax.swing.JTextField;
 
 public class Gui {
     public static void main(String[] args) {
+	new Gui().start();
+	new Thread() {
+	    public void start() {
+		try (Scanner s = new Scanner(System.in)) {
+//		    try (Scanner s = new Scanner(console.myInputStream)){
+		    while (s.hasNextLine()) {
+			System.out.println("echo " + s.nextLine());
+		    }
+		}
+	    }
+	}.start();
+    }
+
+    public void start() {
 	JFrame mainJFrame = new JFrame("Library System");
 	mainJFrame.setLayout(new BorderLayout());
 	JScrollPane scroll = new JScrollPane() {
@@ -29,75 +43,62 @@ public class Gui {
 		return size;
 	    }
 	};
+	Console console = null;
 	try {
-	    Console console = new Console();
-	    console.addComponentListener(new ComponentListener() {
-		@Override
-		public void componentShown(ComponentEvent e) {
-		}
-
-		@Override
-		public void componentResized(ComponentEvent e) {
-		    // credit to
-		    // https://stackoverflow.com/questions/2483572/making-a-jscrollpane-automatically-scroll-all-the-way-down
-		    scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
-		}
-
-		@Override
-		public void componentMoved(ComponentEvent e) {
-		}
-
-		@Override
-		public void componentHidden(ComponentEvent e) {
-		}
-	    });
-	    console.setSystemOut();
-	    scroll.setViewportView(console);
-	    mainJFrame.add(scroll, BorderLayout.NORTH);
-	    mainJFrame.pack();
-	    mainJFrame.setLocationRelativeTo(null);
-	    mainJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    mainJFrame.setVisible(true);
-	    new Thread() {
-		public void start() {
-		    try (Scanner s = new Scanner(System.in)){
-//		    try (Scanner s = new Scanner(console.myInputStream)){
-			while (s.hasNextLine()) {
-			    System.out.println("echo " + s.nextLine());
-			}
-		    }
-		}
-	    }.start();
+	    console = new Console();
 	} catch (IOException e1) {
 	    // TODO Auto-generated catch block
 	    e1.printStackTrace();
 	}
-    }
+	console.addComponentListener(new ComponentListener() {
+	    @Override
+	    public void componentShown(ComponentEvent e) {
+	    }
 
-    public void start() {
-//	System.setOut(null);
+	    @Override
+	    public void componentResized(ComponentEvent e) {
+		// credit to
+		// https://stackoverflow.com/questions/2483572/making-a-jscrollpane-automatically-scroll-all-the-way-down
+		scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+	    }
 
+	    @Override
+	    public void componentMoved(ComponentEvent e) {
+	    }
+
+	    @Override
+	    public void componentHidden(ComponentEvent e) {
+	    }
+	});
+	scroll.setViewportView(console);
+	mainJFrame.add(scroll, BorderLayout.NORTH);
+	mainJFrame.pack();
+	mainJFrame.setLocationRelativeTo(null);
+	mainJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	mainJFrame.setVisible(true);
+
+	console.setSystemOut();
     }
 }
 
-class Console extends JPanel {
+class Console extends JPanel implements AutoCloseable {
     private JTextArea textAreaOutput;
-    private TextAreaOutputStream textAreaOutputStream;
-    MyInputStream myInputStream;
+    private TextAreaOutputStream jTextAreaOutputStream;
+    MyJTextFieldInputStream jTextFieldInputStream;
 
     public Console() throws IOException {
 	setLayout(new BorderLayout());
 	textAreaOutput = new JTextArea();
-	textAreaOutputStream = new TextAreaOutputStream(textAreaOutput);
+	jTextAreaOutputStream = new TextAreaOutputStream(textAreaOutput);
 	add(textAreaOutput, BorderLayout.CENTER);
 	JTextField textFieldInput = new JTextField();
-	myInputStream = new MyInputStream(textFieldInput, null);
+	jTextFieldInputStream = new MyJTextFieldInputStream(textFieldInput, null);
 	add(textFieldInput, BorderLayout.SOUTH);
 
 	// credit:
 	// http://www.java2s.com/Code/Java/Event/SettingtheInitialFocusedComponentinaWindow.htm
 	this.addHierarchyListener(new HierarchyListener() {
-	    
+
 	    @Override
 	    public void hierarchyChanged(HierarchyEvent e) {
 		textFieldInput.requestFocus();
@@ -106,7 +107,13 @@ class Console extends JPanel {
     }
 
     public void setSystemOut() {
-	System.setOut(new PrintStream(textAreaOutputStream));
-	System.setIn(myInputStream);
+	System.setOut(new PrintStream(jTextAreaOutputStream));
+	System.setIn(jTextFieldInputStream);
+    }
+
+    @Override
+    public void close() throws Exception {
+	jTextFieldInputStream.close();
+	jTextAreaOutputStream.close();
     }
 }
