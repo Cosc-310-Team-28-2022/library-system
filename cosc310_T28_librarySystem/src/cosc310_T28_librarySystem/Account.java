@@ -49,6 +49,8 @@ public class Account implements Serializable {
      * @param selectOneBook
      * @return
      */
+
+	 //Search a book in the library, manager and user can all use this function. return a list of book that meet the requirements of user input
     ArrayList<Book> searchForABook(Scanner scanner, LocalLibraryData localLibraryData, boolean selectOneBook) {
 	System.out.print("Enter all or part of the title: ");
 	if (!scanner.hasNextLine()) {
@@ -78,24 +80,6 @@ public class Account implements Serializable {
 	else{
 	return bookFoundlist;
 	}
-	/*else if (selectOneBook) {
-	    if (numberFound == 1) {
-		return bookFound;
-	    } else {
-		System.out.print("Enter the ISBN of the book to select: ");
-		if (!scanner.hasNextLine()) {
-		    return null;
-		}
-		String iSBNEntered = scanner.nextLine();
-		iSBNEntered.replaceAll("-", ""); // delete dashes
-		for (Book book : localLibraryData.bookList) {
-		    if (iSBNEntered.equals("" + bookFound.iSBN)) {
-			return book;
-		    }
-		}
-		System.out.println("Book not found.");
-	    }
-	}*/
 	
     }
 

@@ -22,7 +22,7 @@ public class Manager extends Account {
 
     public Manager() {
     }
-
+	// add a book to library, only function for manager
     void addBook(Scanner scanner, LocalLibraryData localLibraryData) {
 	String title = null;
 	while (title == null) {
@@ -142,7 +142,7 @@ public class Manager extends Account {
 	localLibraryData.freeToLend.add(book);
 	System.out.println("The book has been added successfully.");
     }
-
+	// delete a book from library, only function for manager
     void delBook(Scanner scanner, LocalLibraryData localLibraryData) {
 		ArrayList<Book> bookDeleteList = searchForABook(scanner, localLibraryData,true);
 		
@@ -187,7 +187,7 @@ public class Manager extends Account {
     void searchUser(Scanner scanner, LocalLibraryData localLibraryData) {
 		
     }
-
+	// Return a borrowed Book back to library, only function for manager
     void returnBook(Scanner scanner, LocalLibraryData localLibraryData) {
 		if(localLibraryData.lended.isEmpty()){
 			System.out.println("No book will be return.");
@@ -231,7 +231,7 @@ public class Manager extends Account {
 		}
 			}
     }
-
+	//Through the application for borrowing books
     void checkoutBook(Scanner scanner, LocalLibraryData localLibraryData) {
 		if(localLibraryData.readyToLend.isEmpty()){
 		System.out.println("No book will be lend.");
@@ -274,23 +274,7 @@ public class Manager extends Account {
 		System.out.println("Lend stop.");
 	}
 		}
-	/*Book bookToCheckout = searchForABook(scanner, localLibraryData, true);
-	if (bookToCheckout == null) {
-	    return;
-	}
-	if (localLibraryData.freeToLend.contains(bookToCheckout)) {
-	    localLibraryData.freeToLend.remove(bookToCheckout);
-	    localLibraryData.lended.add(bookToCheckout);
-	    System.out
-		    .println("Checkout successful. Title = " + bookToCheckout.title + " ISBN = " + bookToCheckout.iSBN);
-	} else if (localLibraryData.readyToLend.contains(bookToCheckout)) {
-	    localLibraryData.readyToLend.remove(bookToCheckout);
-	    localLibraryData.lended.add(bookToCheckout);
-	    System.out
-		    .println("Checkout successful. Title = " + bookToCheckout.title + " ISBN = " + bookToCheckout.iSBN);
-	} else {
-	    System.out.println("Sorry, this book seems to be already lended. Maybe return it first.");
-	}*/
+	
     }
 
     public Manager(String userName, String password, int type) {

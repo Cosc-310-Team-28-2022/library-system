@@ -18,16 +18,20 @@ public class LocalLibraryData implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    public ArrayList<BookGroup> bookGroups;
+    // Store the user and manager data 
     public HashMap<String, User> userAccounts;
     public HashMap<String, Manager> managerAccounts;
+    // All book in the library
     public ArrayList<Book> bookList;
+    // Only book can lend 
     public ArrayList<Book> freeToLend;
+    // Books applied for borrowing
     public ArrayList<Book> readyToLend;
+    // Books not in library, Lending
     public ArrayList<Book> lended;
 
     public LocalLibraryData() {
-	bookGroups = new ArrayList<>();
+	
 	userAccounts = new HashMap<>();
 	managerAccounts = new HashMap<>();
 	bookList = new ArrayList<>();

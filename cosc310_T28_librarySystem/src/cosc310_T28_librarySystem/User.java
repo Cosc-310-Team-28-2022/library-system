@@ -24,7 +24,7 @@ public class User extends Account {
 
 	borrow_books = new Book[max_borrow];
     }
-
+    //Apply for borrowing books
     Book borrowBook(Scanner scanner, LocalLibraryData localLibraryData) {
     ArrayList<Book> bookFoundlist = searchForABook(scanner,localLibraryData,true);
     System.out.println("Choose the id(number before the book) of book you want to select: ");
@@ -56,21 +56,7 @@ public class User extends Account {
     else if(define.equals("N"))
         df=false;
 
-   /* while(true){
-        String define = scanner.nextLine();
-        if(define.equals(String.valueOf('Y'))||define.equals(String.valueOf('N'))){
-            if(define.equals(String.valueOf('Y'))){
-                df=true;
-                break;
-        }
-        else{
-            df=false;
-            break;
-        }
-    }else{
-        System.out.println("Please enter 'Y' or 'N'");
-    }
-    }*/
+   
     if(df==true){
         if(borrow_num>=3){
             System.out.println("You have already borrow "+borrow_num+" book(s)! Cannot borrow more.");
@@ -99,7 +85,7 @@ public class User extends Account {
     }
     return null;
     }
-
+    // get list for borrow book
     void orderList(){
         for(int i=0;i<borrow_books.length;i++){
         if(borrow_books[i]!=null)

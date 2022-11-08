@@ -67,7 +67,10 @@ public class UserAndManagerTerminal extends Thread {
         
         switch (LogInTypeSelection) {   
             case "1":
-            currentAccount = tryLoggingIn(scanner, localLibraryData);
+            if(isManager==true)
+            currentAccount = tryLoggingInManager(scanner, localLibraryData);
+            if(isManager==false)
+            currentAccount = tryLoggingInUser(scanner, localLibraryData);
             if (currentAccount == null) {
                 System.out.println("Login failed. Exiting.");
                         finishedWithoutInterruption = true;
@@ -89,25 +92,7 @@ public class UserAndManagerTerminal extends Thread {
                 break;
             }
             
-        // Old log in part:
-	    //log in or create first account
-/* 	    if (localLibraryData.managerAccounts.isEmpty()) {
-                System.out.println("Currently there are no manager (librarian) accounts. Please create a manager account.");
-		currentAccount = tryCreatingAccount(scanner, localLibraryData, true);
-		if (currentAccount == null) {
-		    System.out.println("Account creation failed. Exiting.");
-                    finishedWithoutInterruption = true;
-                    return;
-		}
-                localLibraryData.managerAccounts.put(currentAccount.getUsername(), (Manager) currentAccount);
-	    } else {
-		currentAccount = tryLoggingIn(scanner, localLibraryData);
-		if (currentAccount == null) {
-		    System.out.println("Login failed. Exiting.");
-                    finishedWithoutInterruption = true;
-                    return;
-		}
-	    }*/
+       
 	    
 	    //this while loop is the main loop for the user or manager to do any command
             UserOrManagerCommandResult userOrManagerCommandResult;
@@ -119,10 +104,10 @@ public class UserAndManagerTerminal extends Thread {
 	} finally {
 	    if (!finishedWithoutInterruption) {
 		System.out.println("Program interrupted. Exiting.");
-	    }
+	    }else{System.out.println("Shut down the system");}
 	}
     }
-
+    // Create a new account 
     private Account tryCreatingAccount(Scanner scanner, LocalLibraryData localLibraryData, boolean isManager) {
         String username = null;
         while (username == null) {
@@ -166,7 +151,7 @@ public class UserAndManagerTerminal extends Thread {
         }
         return newAccount;
     }
-    private Account tryLoggingIn(Scanner scanner, LocalLibraryData localLibraryData) {
+    private Account tryLoggingInUser(Scanner scanner, LocalLibraryData localLibraryData) {
         System.out.println("Please log in to an account.");
         Account accountToLogIn = null;
         while (accountToLogIn == null) {
@@ -175,9 +160,7 @@ public class UserAndManagerTerminal extends Thread {
                 return null;
             }
             String usernameEntered = scanner.nextLine();
-            if (localLibraryData.managerAccounts.containsKey(usernameEntered)) {
-        	accountToLogIn = localLibraryData.managerAccounts.get(usernameEntered);
-            } else if (localLibraryData.userAccounts.containsKey(usernameEntered)) {
+            if (localLibraryData.userAccounts.containsKey(usernameEntered)) {
         	accountToLogIn = localLibraryData.userAccounts.get(usernameEntered);
             } else {
         	System.out.println("Account not found.");
@@ -197,6 +180,37 @@ public class UserAndManagerTerminal extends Thread {
             }
         }
     }
+    private Account tryLoggingInManager(Scanner scanner, LocalLibraryData localLibraryData) {
+        System.out.println("Please log in to an account.");
+        Account accountToLogIn = null;
+        while (accountToLogIn == null) {
+            System.out.print("Username: ");
+            if (!scanner.hasNextLine()) {
+                return null;
+            }
+            String usernameEntered = scanner.nextLine();
+            if (localLibraryData.managerAccounts.containsKey(usernameEntered)) {
+        	accountToLogIn = localLibraryData.managerAccounts.get(usernameEntered);
+            } else {
+        	System.out.println("Account not found.");
+            return null;
+            }
+        }
+        while (true) {
+            System.out.print("Password: ");
+            if (!scanner.hasNextLine()) {
+                return null;
+            }
+            String passwordEntered = scanner.nextLine();
+            if (!accountToLogIn.passwordEquals(passwordEntered)) {
+        	System.out.println("Password incorrect.");
+            } else {
+        	return accountToLogIn;
+            }
+        }
+    }
+
+    //Input the corresponding number realization function
     private UserOrManagerCommandResult askAndDoNextUserOrManagerCommand(Scanner scanner, LocalLibraryData localLibraryData, Account currentAccount) {
         System.out.println("Welcome " + currentAccount.getUsername() + ". What would you like to do? Enter a number to make a selection.");
         if (currentAccount instanceof Manager) {
@@ -206,6 +220,8 @@ public class UserAndManagerTerminal extends Thread {
             System.out.println("4: add a new book from library");
             System.out.println("5: delete a book");
             System.out.println("6: return a lended book");
+            System.out.println("7: quit and save");
+            System.out.println("8: quit without save");
             if (!scanner.hasNextLine()) {
                 return null;
             }
@@ -229,17 +245,23 @@ public class UserAndManagerTerminal extends Thread {
                 case "6":
                     ((Manager) currentAccount).returnBook(scanner, localLibraryData);
                     break;
+                case "7":
+                    saveSession(scanner, localLibraryData);
+                    return UserOrManagerCommandResult.EXIT;
+                case "8":
+                    return UserOrManagerCommandResult.EXIT; 
         	default:
                     System.out.println("Selection unavailable");
                     break;
             }
         } else if (currentAccount instanceof User) {
-            //User function should change later, keep search and checkout, save should automatic execution when the program ends
-            //add function should delete, add a quit function.
+            
             System.out.println("1: search for a book");
             System.out.println("2: apply to lend a book");
             System.out.println("3: save session");
-            
+            System.out.println("4: quit and save");
+            System.out.println("5: quit without save");
+
             if (!scanner.hasNextLine()) {
                 return null;
             }
@@ -254,6 +276,12 @@ public class UserAndManagerTerminal extends Thread {
                 case "3":
                     saveSession(scanner, localLibraryData);
                     break;
+                case "4":
+                    saveSession(scanner, localLibraryData);
+                    return UserOrManagerCommandResult.EXIT;
+                case "5":
+                    return UserOrManagerCommandResult.EXIT;   
+                    
         	default:
                     System.out.println("Selection unavailable");
                     break;
@@ -269,6 +297,8 @@ public class UserAndManagerTerminal extends Thread {
 	LOG_OUT;
     }
 
+
+    //save data function
     private void saveSession(Scanner scanner, LocalLibraryData localLibraryData) {
 	try {
 	    if (!Files.exists(Paths.get("cosc310_T28_library_system_saved_files/"))) {
@@ -287,6 +317,8 @@ public class UserAndManagerTerminal extends Thread {
 	    i.printStackTrace();
 	}
     }
+
+    //load data function
     private LocalLibraryData loadSession() {
 	if (Files.exists(Paths.get("cosc310_T28_library_system_saved_files/main.ser"))) {
 	    try (
@@ -302,5 +334,8 @@ public class UserAndManagerTerminal extends Thread {
 	    }	
 	}
 	return null;
-    }
+    } 
+
 }
+
+       
