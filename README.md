@@ -49,3 +49,5 @@ b.	Library User
 
 
 ![Image](code%20structure.png)
+![Image](LENDING BOOK.png)
+![Image](BORROWING BOOK.png)
