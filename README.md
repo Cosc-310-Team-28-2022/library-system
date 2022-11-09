@@ -33,6 +33,19 @@ The main class currently just creates a UserAndManagerTerminal and starts it.
 
 The UserAndManagerTerminal is a Thread which communicates with the user using text through the standard input and standard output. It lets the person interacting with the program log in or create an account, and it goes into a loop asking him for the next action. When the program starts, it also loads the LocalLibraryData from a text file if avaiable and allows the person (user or manager) to save it to the text file any time.
 
-### Conceptual diagram of Serializable classes
-For concepts, a link can either mean "is contained in" or "is a subclass." The BookGroup in the diagram isn't supported in the code yet.
+Feature List
+
+1.	Creating an Account
+a.	Librarian
+b.	Library User
+2.	Adding a book
+3.	Deleting a book
+4.	Searching for a book
+5.	Checking-out the book
+6.	Returning the book
+7.	Simple GUI
+8.	Quitting without SAVE
+9.	Quitting with SAVE
+
+
 ![Image](code%20structure.png)
