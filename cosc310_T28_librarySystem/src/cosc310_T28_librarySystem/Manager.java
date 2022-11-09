@@ -20,8 +20,12 @@ public class Manager extends Account {
      */
     private static final long serialVersionUID = 1L;
 
-    public Manager() {
+    public Manager() {}
+    
+    public Manager(String userName, String password, int type) {
+	super(userName, password, type);
     }
+    
 	// add a book to library, only function for manager
     void addBook(Scanner scanner, LocalLibraryData localLibraryData) {
 	String title = null;
@@ -277,7 +281,5 @@ public class Manager extends Account {
 	
     }
 
-    public Manager(String userName, String password, int type) {
-	super(userName, password, type);
-    }
+    
 }

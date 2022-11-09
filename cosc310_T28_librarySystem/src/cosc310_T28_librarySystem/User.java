@@ -19,6 +19,9 @@ public class User extends Account {
     private final int max_borrow = 3;
     private int borrow_num;
     private Book borrow_books[]=new Book[max_borrow];
+    
+    public User() {}
+    
     public User(String userName, String password, int type) {
 	super(userName, password, type);
 
