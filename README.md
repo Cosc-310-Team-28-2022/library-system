@@ -33,21 +33,43 @@ The main class currently just creates a UserAndManagerTerminal and starts it.
 
 The UserAndManagerTerminal is a Thread which communicates with the user using text through the standard input and standard output. It lets the person interacting with the program log in or create an account, and it goes into a loop asking him for the next action. When the program starts, it also loads the LocalLibraryData from a text file if avaiable and allows the person (user or manager) to save it to the text file any time.
 
-Feature List
+Feature Lists
 
-1.	Creating an Account
-a.	Librarian
-b.	Library User
-2.	Adding a book
-3.	Deleting a book
-4.	Searching for a book
-5.	Checking-out the book
-6.	Returning the book
-7.	Simple GUI
-8.	Quitting without SAVE
-9.	Quitting with SAVE
+1.	Librarian
+a.	Creating an account
+i.	For the user to easily access to the feature for Librarian 
+b.	Adding a book	
+i.	For the user to add a book to the system
+c.	Deleting a book
+i.	For the user to delete book from the system
+d.	Searching for a book
+i.	For the user to find the added book by any attributes (Name, ISBN, etc.)
+e.	Checking-out the book
+i.	For the user to check if the book is being lent
+f.	Returning the book
+i.	For the user to get the book back from library user
+g.	Quitting without SAVE
+i.	To quit without saving the progress
+h.	Quitting with SAVE
+i.	To quit with saving the progress
+
+2.	Public User
+a.	Creating an account
+i.	For the user to easily access to the feature for public user
+b.	Searching for a book
+i.	For the user to find the added book by any attributes (Name, ISBN, etc.)
+c.	Borrowing the Book
+i.	For the user to borrow the selected book
+d.	Quitting without SAVE
+i.	To quit without saving the progress
+e.	Quitting with SAVE
+i.	To quit with saving the progress
+3.	GUI
+a.	For all user to easily interact with the program
+
+
 
 
 ![Image](code%20structure.png)
-![Image](LENDING BOOK.png)
-![Image](BORROWING BOOK.png)
+![Image](code%20LENDING BOOK.png)
+![Image](code%20BORROWING BOOK.png)
