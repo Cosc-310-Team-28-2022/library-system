@@ -33,7 +33,7 @@ public class UserAndManagerTerminal extends Thread {
     
 	try (Scanner scanner = new Scanner(System.in)) {
         
-        localLibraryData = loadSession();
+        localLibraryData = loadSession("main.ser");
         if (localLibraryData == null) {
                 localLibraryData = new LocalLibraryData();
         }
@@ -234,7 +234,7 @@ public class UserAndManagerTerminal extends Thread {
                     ((Manager) currentAccount).checkoutBook(scanner, localLibraryData);
                     break;
                 case "3":
-                    saveSession(scanner, localLibraryData);
+                    saveSession(scanner, localLibraryData, "main.ser");
                     break;
                 case "4":
                     ((Manager) currentAccount).addBook(scanner, localLibraryData);
@@ -246,7 +246,7 @@ public class UserAndManagerTerminal extends Thread {
                     ((Manager) currentAccount).returnBook(scanner, localLibraryData);
                     break;
                 case "7":
-                    saveSession(scanner, localLibraryData);
+                    saveSession(scanner, localLibraryData, "main.ser");
                     return UserOrManagerCommandResult.EXIT;
                 case "8":
                     return UserOrManagerCommandResult.EXIT; 
@@ -274,10 +274,10 @@ public class UserAndManagerTerminal extends Thread {
                     ((User) currentAccount).borrowBook(scanner, localLibraryData);
                     break;
                 case "3":
-                    saveSession(scanner, localLibraryData);
+                    saveSession(scanner, localLibraryData, "main.ser");
                     break;
                 case "4":
-                    saveSession(scanner, localLibraryData);
+                    saveSession(scanner, localLibraryData, "main.ser");
                     return UserOrManagerCommandResult.EXIT;
                 case "5":
                     return UserOrManagerCommandResult.EXIT;   
@@ -299,7 +299,7 @@ public class UserAndManagerTerminal extends Thread {
 
 
     //save data function
-    private void saveSession(Scanner scanner, LocalLibraryData localLibraryData) {
+    void saveSession(Scanner scanner, LocalLibraryData localLibraryData, String name) {
 	try {
 	    if (!Files.exists(Paths.get("cosc310_T28_library_system_saved_files/"))) {
 		Files.createDirectories(Paths.get("cosc310_T28_library_system_saved_files/")); // does not overwrite anyways
@@ -308,7 +308,7 @@ public class UserAndManagerTerminal extends Thread {
 	    e.printStackTrace();
 	}
 	try (
-		FileOutputStream fileOut = new FileOutputStream("cosc310_T28_library_system_saved_files/main.ser");
+		FileOutputStream fileOut = new FileOutputStream("cosc310_T28_library_system_saved_files/" + name);
 //		GZIPOutputStream zipOut = new GZIPOutputStream(fileOut);
 		ObjectOutputStream out = new ObjectOutputStream(fileOut)
 		) {
@@ -319,10 +319,10 @@ public class UserAndManagerTerminal extends Thread {
     }
 
     //load data function
-    private LocalLibraryData loadSession() {
-	if (Files.exists(Paths.get("cosc310_T28_library_system_saved_files/main.ser"))) {
+    LocalLibraryData loadSession(String name) {
+	if (Files.exists(Paths.get("cosc310_T28_library_system_saved_files/" + name))) {
 	    try (
-		    FileInputStream fileIn = new FileInputStream("cosc310_T28_library_system_saved_files/main.ser");
+		    FileInputStream fileIn = new FileInputStream("cosc310_T28_library_system_saved_files/" + name);
 //		    GZIPInputStream zipIn = new GZIPInputStream(fileIn);
 		    ObjectInputStream in = new ObjectInputStream(fileIn)
 		    ) {
