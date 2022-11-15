@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class UserAndManagerTerminal extends Thread {
     LocalLibraryData localLibraryData;
+    Console console;
 
     public UserAndManagerTerminal() {
 	super();
@@ -29,7 +30,8 @@ public class UserAndManagerTerminal extends Thread {
 		boolean finishedWithoutInterruption = false; // this boolean tells the try-finally clause whether
 						     // scanner.hasNextLine()
 						     // failed
-	new Console().create();
+	console = new Console();
+	console.create();
     
 	try (Scanner scanner = new Scanner(System.in)) {
         
@@ -129,10 +131,12 @@ public class UserAndManagerTerminal extends Thread {
         String password = null;
         while (password == null) {
             System.out.print("Password: ");
+            console.setPasswordMode(true);
             if (!scanner.hasNextLine()) {
                 return null;
             }
             String passwordEntered = scanner.nextLine();
+            console.setPasswordMode(false);
             if (!passwordEntered.matches("^[a-zA-Z0-9 _-`~!@#$%^&*()=+\\[{\\]}\\\\|;:'\",<.>/?]*$")) {
         	System.out.println("The password must contain only letters, numbers, _-`~!@#$%^&*()=+[{]}\\|;:'\",<.>/? symbols, or spaces.");
             } else if (!(1 <= passwordEntered.length() && passwordEntered.length() <= 99)) {
@@ -169,10 +173,12 @@ public class UserAndManagerTerminal extends Thread {
         }
         while (true) {
             System.out.print("Password: ");
+            console.setPasswordMode(true);
             if (!scanner.hasNextLine()) {
                 return null;
             }
             String passwordEntered = scanner.nextLine();
+            console.setPasswordMode(false);
             if (!accountToLogIn.passwordEquals(passwordEntered)) {
         	System.out.println("Password incorrect.");
             } else {
@@ -198,10 +204,12 @@ public class UserAndManagerTerminal extends Thread {
         }
         while (true) {
             System.out.print("Password: ");
+            console.setPasswordMode(true);
             if (!scanner.hasNextLine()) {
                 return null;
             }
             String passwordEntered = scanner.nextLine();
+            console.setPasswordMode(false);
             if (!accountToLogIn.passwordEquals(passwordEntered)) {
         	System.out.println("Password incorrect.");
             } else {
@@ -298,7 +306,12 @@ public class UserAndManagerTerminal extends Thread {
     }
 
 
-    //save data function
+    /**
+     * save data function
+     * NOTE: this doesn't need to be encrypted since everyone can see the books, just not the passwords
+     * @param name
+     * @return
+     */
     void saveSession(Scanner scanner, LocalLibraryData localLibraryData, String name) {
 	try {
 	    if (!Files.exists(Paths.get("cosc310_T28_library_system_saved_files/"))) {
@@ -318,7 +331,12 @@ public class UserAndManagerTerminal extends Thread {
 	}
     }
 
-    //load data function
+    /**
+     * load data function
+     * NOTE: this doesn't need to be encrypted since everyone can see the books, just not the passwords
+     * @param name
+     * @return
+     */
     LocalLibraryData loadSession(String name) {
 	if (Files.exists(Paths.get("cosc310_T28_library_system_saved_files/" + name))) {
 	    try (

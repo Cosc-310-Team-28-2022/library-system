@@ -12,13 +12,15 @@ import java.util.Scanner;
  *         The Account class is the subclass for User and Manager. Any activity
  *         both library users and library managers can do, such as searching a
  *         book, is implemented by this class.
+ *         
+ *         Passwords are encrypted using password hashing by https://stackoverflow.com/questions/2860943/how-can-i-hash-a-password-in-java
  */
 public class Account implements Serializable {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    private String userName, password;
+    private String userName, encryptedPassword;
     private int type;
 
     public Account() {
@@ -28,8 +30,9 @@ public class Account implements Serializable {
     public Account(String userName, String password, int type) {
 	super();
 	this.userName = userName;
-	this.password = password;
 	this.type = type;
+	PasswordAuthentication pa = new PasswordAuthentication();
+	this.encryptedPassword = pa.hash(password.toCharArray());
     }
 
     public String getUsername() {
@@ -37,7 +40,8 @@ public class Account implements Serializable {
     }
 
     public boolean passwordEquals(String passwordEntered) {
-	return password.equals(passwordEntered);
+	PasswordAuthentication pa = new PasswordAuthentication();
+	return pa.authenticate(passwordEntered.toCharArray(), encryptedPassword);
     }
 
     /**
@@ -96,7 +100,7 @@ public class Account implements Serializable {
 	if (getClass() != obj.getClass())
 	    return false;
 	Account other = (Account) obj;
-	return Objects.equals(password, other.password) && type == other.type
+	return Objects.equals(encryptedPassword, other.encryptedPassword) && type == other.type
 		&& Objects.equals(userName, other.userName);
     }
 

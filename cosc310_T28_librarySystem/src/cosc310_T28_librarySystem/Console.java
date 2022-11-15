@@ -14,9 +14,11 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -25,24 +27,30 @@ import javax.swing.JTextPane;
  * 
  * @author lodeous and Team 28
  * copied from lodeous's Github at https://gist.github.com/lodeous/70e36c2ebed76f3efe257204d9cdc375
- * Edited to add different colours and output stream for System.setOut()
+ * Edited to add different colours and output stream for System.setOut(), also added password capability
  *
  */
 public class Console {
 
     private JFrame consoleFrame;
+    private JPanel consolePane;
     private JTextPane outputPane;
     private JTextField inputField;
+    private JPasswordField passwordInputField;
     PipedOutputStream outputFromField;
     PipedInputStream inputFromField;
 //    private Scanner fieldInput;
     private PrintStream fieldOutput;
+    private GridBagConstraints inputFieldConstraints; // used to swap inputField and passwordInputField
+    private boolean passwordMode = false;
+    
 
     public void create() {
         //create components
         consoleFrame = new JFrame("Library System");
         outputPane = new JTextPane();
         inputField = new JTextField();
+        passwordInputField = new JPasswordField();
         
         
 
@@ -70,26 +78,36 @@ public class Console {
         //Setup listeners
 
         //This listener listens for ENTER key on the inputField.
-        inputField.addActionListener(new ActionListener() {
+        ActionListener enterListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String text = inputField.getText();
-                jTextPaneOutputStream.writeString(text + "\n", Color.GREEN);
-                fieldOutput.println(text);
-                inputField.setText("");
-                //Wake up the other thread for an immediate response.
-                synchronized (inputFromField) {
-                    inputFromField.notify();
-                }
+        	String text = inputField.getText();
+        	if (!text.equals("")) {
+        	    jTextPaneOutputStream.writeString(text + "\n", Color.GREEN);
+        	} else {
+        	    char[] password = passwordInputField.getPassword();
+        	    text = String.valueOf(password);
+        	    Arrays.fill(password, '*');
+        	    jTextPaneOutputStream.writeString(String.valueOf(password) + "\n", Color.GREEN);
+        	}
+        	fieldOutput.println(text);
+        	inputField.setText("");
+        	passwordInputField.setText("");
+        	//Wake up the other thread for an immediate response.
+        	synchronized (inputFromField) {
+        	    inputFromField.notify();
+        	}
             }
-        });
+        };
+        inputField.addActionListener(enterListener);
+        passwordInputField.addActionListener(enterListener);
 
         //Setup Frame for display
         //Add components
 
         consoleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel consolePane = new JPanel() {
+        consolePane = new JPanel() {
 	    @Override
 	    public Dimension getPreferredSize() {
 		Dimension size = super.getPreferredSize();
@@ -119,6 +137,7 @@ public class Console {
         layoutConstraints.weightx = 1;
         layoutConstraints.weighty = 0;
         consolePane.add(inputField, layoutConstraints);
+        inputFieldConstraints = layoutConstraints;
 
 	JScrollPane scroll = new JScrollPane(consolePane) {
 	    @Override
@@ -178,6 +197,19 @@ public class Console {
     public void setSystemOutAndSystemIn() {
       System.setOut(new PrintStream(jTextPaneOutputStream));
       System.setIn(inputFromField);
+    }
+    
+    public void setPasswordMode(boolean passwordMode) {
+	if (passwordMode && !this.passwordMode) {
+	    consolePane.remove(inputField);
+	    consolePane.add(passwordInputField, inputFieldConstraints);
+	    passwordInputField.requestFocus();
+	} else if (!passwordMode && this.passwordMode) {
+	    consolePane.remove(passwordInputField);
+	    consolePane.add(inputField, inputFieldConstraints);
+	    inputField.requestFocus();
+	}
+	this.passwordMode = passwordMode;
     }
 
 
