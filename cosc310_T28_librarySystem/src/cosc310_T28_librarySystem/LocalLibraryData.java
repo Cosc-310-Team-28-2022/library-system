@@ -3,6 +3,7 @@ package cosc310_T28_librarySystem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * 
@@ -38,6 +39,20 @@ public class LocalLibraryData implements Serializable {
 	freeToLend = new ArrayList<>();
 	readyToLend = new ArrayList<>();
 	lended = new ArrayList<>();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	LocalLibraryData other = (LocalLibraryData) obj;
+	return Objects.equals(bookList, other.bookList) && Objects.equals(freeToLend, other.freeToLend)
+		&& Objects.equals(lended, other.lended) && Objects.equals(managerAccounts, other.managerAccounts)
+		&& Objects.equals(readyToLend, other.readyToLend) && Objects.equals(userAccounts, other.userAccounts);
     }
 
 }
